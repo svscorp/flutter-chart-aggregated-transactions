@@ -71,7 +71,7 @@ There are some solutions, like `textfleid_tags` package (that is used as a basis
 
 ### Result
 
-(image)
+![image](https://github.com/user-attachments/assets/01b6b87d-9d80-4432-99b2-4f386f8f211a)
 
 ### Features
 1. Exposes configuration parameter (prefixIcon)
