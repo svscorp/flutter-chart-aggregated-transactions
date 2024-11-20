@@ -12,8 +12,9 @@ import 'package:flutter/material.dart';
 
 import '../widgets/taggable_text_widget.dart';
 
-Future<List<String>> getTaggableTextWidgetCurrentValue() async {
+Future<List<String>> getTaggableTextWidgetCurrentValue(
+    String widgetInstanceName) async {
   final sharedState = TaggableTextWidgetSharedState();
 
-  return sharedState.tagsList;
+  return sharedState.getTags(widgetInstanceName);
 }

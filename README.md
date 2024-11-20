@@ -57,6 +57,22 @@ You have a Firestore (or other data store) collection: 'transactions' that conta
 
 ## 2. Custom Taggable Text Field Widget (TaggableTextWidget.dart + getTaggableTextWidgetCurrentValue.dart)
 
+### Challenge
+
+Again, many built in components in FF. However, what if I need to implement a simple field with tags, that also will be participating in FormSubmission. 
+There are some solutions, like `textfleid_tags` package (that is used as a basis in my case), but it doesn't expose state to be available in setting the value from in the actions flow.
+
+### Solution
+
+1. A tagging library. In particular `textfield_tags`
+2. SharedState Management (extra class on top of the widget, see the complete widget in `TaggableTextWidget.dart`)
+3. Extra function to retrieve shared state of the custom widget (see `getTaggableTextWidgetCurrentValue.dart`)
+4. Extra argument for the widget to specify `widgetInstanceName`, so that multiple instances of the same widget can be used and their values can be retrieved.
+
+### Result
+
+(image)
+
 ### Features
 1. Exposes configuration parameter (prefixIcon)
 2. Exposes Shared State, so it's available in Actions to set the value from

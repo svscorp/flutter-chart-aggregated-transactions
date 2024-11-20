@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class TaggableTextWidgetSharedState {
-  List<String> _tagsList = [];
+  final Map<String, List<String>> _widgetStates = {};
 
   TaggableTextWidgetSharedState._privateConstructor();
 
@@ -25,10 +25,12 @@ class TaggableTextWidgetSharedState {
     return _instance;
   }
 
-  List<String> get tagsList => _tagsList;
+  List<String> getTags(String widgetInstanceName) {
+    return _widgetStates[widgetInstanceName] ?? [];
+  }
 
-  set tagsList(List<String> tagsList) {
-    _tagsList = tagsList;
+  void updateTags(String widgetInstanceName, List<String> tags) {
+    _widgetStates[widgetInstanceName] = tags;
   }
 }
 
@@ -38,11 +40,13 @@ class TaggableTextWidget extends StatefulWidget {
     this.width,
     this.height,
     required this.prefixIcon,
+    required this.widgetInstanceName,
   });
 
   final double? width;
   final double? height;
   final Widget prefixIcon;
+  final String widgetInstanceName;
 
   @override
   State<TaggableTextWidget> createState() => _TaggableTextWidgetState();
@@ -51,27 +55,30 @@ class TaggableTextWidget extends StatefulWidget {
 class _TaggableTextWidgetState extends State<TaggableTextWidget> {
   late final StringTagController _stringTagController;
   late double _distanceToField;
-
-  TaggableTextWidgetSharedState _taggableTextWidgetSharedState =
+  TaggableTextWidgetSharedState _sharedState =
       new TaggableTextWidgetSharedState();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _distanceToField = MediaQuery.of(context).size.width;
-    print(_distanceToField);
   }
 
   @override
   void initState() {
     super.initState();
-    _stringTagController = StringTagController(); // Initialize the controller
+    _stringTagController = StringTagController();
   }
 
   @override
   void dispose() {
     _stringTagController.dispose();
     super.dispose();
+  }
+
+  void _updateTags() {
+    _sharedState.updateTags(
+        widget.widgetInstanceName, _stringTagController.getTags ?? []);
   }
 
   @override
@@ -96,17 +103,13 @@ class _TaggableTextWidgetState extends State<TaggableTextWidget> {
         return TextField(
           controller: inputFieldValues.textEditingController,
           focusNode: inputFieldValues.focusNode,
-          //onChanged: inputFieldValues.onTagChanged,
           onChanged: (value) {
             inputFieldValues.onTagChanged(value);
-            _taggableTextWidgetSharedState.tagsList =
-                _stringTagController.getTags ?? [];
+            _updateTags();
           },
-          //onSubmitted: inputFieldValues.onTagSubmitted,
           onSubmitted: (value) {
             inputFieldValues.onTagSubmitted(value);
-            _taggableTextWidgetSharedState.tagsList =
-                _stringTagController.getTags ?? [];
+            _updateTags();
           },
           decoration: InputDecoration(
             isDense: true,
