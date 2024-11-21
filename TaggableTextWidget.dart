@@ -41,12 +41,14 @@ class TaggableTextWidget extends StatefulWidget {
     this.height,
     required this.prefixIcon,
     required this.widgetInstanceName,
+    this.initialValue,
   });
 
   final double? width;
   final double? height;
   final Widget prefixIcon;
   final String widgetInstanceName;
+  final List<String>? initialValue;
 
   @override
   State<TaggableTextWidget> createState() => _TaggableTextWidgetState();
@@ -91,7 +93,7 @@ class _TaggableTextWidgetState extends State<TaggableTextWidget> {
 
     return TextFieldTags<String>(
       textfieldTagsController: _stringTagController,
-      initialTags: [],
+      initialTags: widget.initialValue ?? [],
       textSeparators: const [' ', ','],
       validator: (String tag) {
         if (_stringTagController.getTags!.contains(tag)) {
